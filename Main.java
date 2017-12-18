@@ -11,7 +11,7 @@ public class Main
     {
         Game game = new Game();
         game.sayHello();
-        if (game.useText())
+        if (game.getChoice("Выберите режим!", "Текст", "Графика"))
         {
             System.out.println(game.getTEXT_CHOSEN());
             game.run();

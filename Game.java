@@ -73,52 +73,6 @@ public class Game
     }
 
     /**
-     * Метод запрашивает вариант игры
-     * 0 - текустовый, 1 - графический
-     * Метод использует обработку прерываний, чтобы исключить
-     * вывод ошибки при вводе не корректнных значений. В таким случаях
-     * предлагается снова сделать выбор.
-     * @return логическое ИСТИНА, если выбран текстовый режим
-     * или логическое ЛОЖЬ, если выбран графический режим.
-     */
-    public boolean useText()
-    {
-        boolean keepAsking = true;
-        boolean useText = true;
-
-        while (keepAsking)
-        {
-            int num = -1;
-            System.out.println(TEXT_OR_GUI_MSG);
-            try
-            {
-                num = sc.nextInt();
-            }
-            catch (Exception e)
-            {
-                System.out.println(IOERR_MSG);
-                sc.next(); // Раз ошиблись,идём дальше.
-            }
-            if (num == 1)
-            {
-                useText = false;
-                keepAsking = false;
-            }
-            else if (num == 0)
-            {
-                useText = true;
-                keepAsking = false;
-            }
-            else
-            {
-                System.out.println(BAD_CHOICE_MSG);
-            }
-        }
-
-        return useText;
-    }
-
-    /**
      * Главный цикл игры
      * Работает пока переменная playing возвращает ИСТИНА.
      */
@@ -153,10 +107,21 @@ public class Game
             System.out.println("Осталось в деке: " + deck.getDeckCardsNum() + " карт.");
 
             // Обработка выигрыша Игрока на раздаче
-
-            // Запрос хочет ли Игрок еще карту
+            if (player.getTotalScore() == 21)
+            {
+                System.out.println("Поздравляю! У вас 21 на раздаче!");
+                // TODO: Добавить подсчет выигранных партий.
+            }
+            else
+            {
+                // TODO: использовать универсальный метод getChoice()
+                // Запрос хочет ли Игрок еще карту
                 // Выдача карты, при необходимости
                 // Проверка на Выигрыш или Перебор
+
+            }
+
+
             // Раздача карт диллеру пока он не наберет боьше 17 (простой интеллект)
             // Проверка 21,
             // перебора,
@@ -164,7 +129,56 @@ public class Game
             // выигрыша,
             // или проигрыша.
             // Проверка хотим ли ещё.
-            playing = false; // TODO: Заменить потом на нормальный выход из игры.
+            playing = getChoice("Хотите сыграть ещё?", "да", "нет");
         }
+    }
+
+    /**
+     * Метод запрашивает у игрока о решении. Задается вопрос или делается сообщение.
+     * В ответ пользователь должен выбрать 0 или 1. Метод предлагает варианты.
+     * Метод использует обработку исключений для исключения ввода значений отличающихся от 0 и 1.
+     * Параметры метода используются следующим образом:
+     * @param text      Вопрос или сообщение. Например, "Хотите продолжить игру?"
+     * @param first     Первый вариант ответа. Например, "да".
+     * @param second    Второй вариант ответа. Например, "нет".
+     * @return          Метод возвращает логическое выражение ИСТИНА, если пользователь выбрал
+     * первый вариант или ЛОЖЬ, если второй.
+     */
+    public boolean getChoice(String text, String first, String second)
+    {
+        boolean keepAsking = true;
+        boolean playMore = true;
+
+        while (keepAsking)
+        {
+            int num = -1;
+            System.out.println(text + " (0 - " + first + ", 1 - " + second + ")");
+            try
+            {
+                num = sc.nextInt();
+            }
+            catch (Exception e)
+            {
+                System.out.println(IOERR_MSG);
+                sc.next(); // Раз ошиблись,идём дальше.
+            }
+            if (num == 1)
+            {
+                playMore = false;
+                keepAsking = false;
+            }
+            else if (num == 0)
+            {
+                playMore = true;
+                keepAsking = false;
+            }
+            else
+            {
+                System.out.println(BAD_CHOICE_MSG);
+            }
+        }
+
+        return playMore;
+
     }
 }
